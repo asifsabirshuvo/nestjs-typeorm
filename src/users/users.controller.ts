@@ -1,4 +1,4 @@
-import { Get, Controller, Post, Body, Put } from '@nestjs/common';
+import { Get, Controller, Post, Body, Put, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { UpdateResult, DeleteResult } from 'typeorm';
@@ -17,9 +17,14 @@ export class UsersController {
     return await this.usersService.findOne(id);
   }
 
+  @Post('find-one/:id')
+  async findOnemProfile(@Param('id') id: string): Promise<User> {
+    return await this.usersService.findOne(id);
+  }
+
   @Put('update-one')
   // @ApiOperation({title: 'A private route for check the auth'})
-  async updateProfile(@Body() user:User): Promise<UpdateResult> {
+  async updateProfile(@Body() user: User): Promise<UpdateResult> {
     return await this.usersService.updateOne(user);
   }
 
@@ -28,8 +33,6 @@ export class UsersController {
   async deleteProfile(@Body() id: string): Promise<DeleteResult> {
     return await this.usersService.remove(id);
   }
-
- 
 
   @Get('all')
   // @ApiOperation({title: 'A private route for check the auth'})
