@@ -1,8 +1,8 @@
-import { Injectable, Param } from '@nestjs/common';
+import { Injectable }from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getConnection, UpdateResult, DeleteResult } from 'typeorm';
+import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 import { User } from './user.entity';
-import { from } from 'rxjs';
+import { userDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -11,7 +11,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async createOne(userdata: User): Promise<any> {
+  async createOne(userdata: userDto): Promise<any> {
     if (!userdata.firstName) return 'firstname must be provided';
     if (!userdata.lastName) return 'lastname must be provided';
 
