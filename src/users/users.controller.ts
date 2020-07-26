@@ -1,6 +1,6 @@
 import { Get, Controller, Post, Body, Put, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { UpdateResult, DeleteResult } from 'typeorm';
 import { ApiOperation } from '@nestjs/swagger';
 import { userDto } from './dto/user.dto';
