@@ -3,6 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
+  
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -14,4 +15,5 @@ export class User {
 
   @Column({ default: true })
   isActive: string;
+
 }

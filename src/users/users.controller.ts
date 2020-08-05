@@ -1,36 +1,43 @@
-import { Get, Controller, Post, Body, Put, Param } from '@nestjs/common';
+import { Get, Controller, Post, Body, Put, Param,ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UpdateResult, DeleteResult } from 'typeorm';
 import { ApiOperation } from '@nestjs/swagger';
-import { userDto } from './dto/user.dto';
+import { createUserDto } from './dto/createUserDto';
+import { updateUserDto } from './dto/updateUserDto';
+import { idDto } from './dto/idDto';
+import {UpdateProfileSerializer} from './serializer/updateProfileSerializer'
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiOperation({ summary: 'adding user' })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('add-one')
-  async postUser(@Body() user: userDto): Promise<any> {
+  async postUser(@Body() user: createUserDto): Promise<any> {
     return await this.usersService.createOne(user);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'finding user from body' })
   @Post('find-one')
-  async findOneProfile(@Body() id: string): Promise<User> {
-    return await this.usersService.findOne(id);
+  async findOneProfile(@Body() userId: idDto): Promise<User> {
+    return await this.usersService.findOne(userId.id);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'finding user from url params' })
   @Post('find-one/:id')
-  async findOnemProfile(@Param('id') id: string): Promise<User> {
-    return await this.usersService.findOne(id);
+  async findOnemProfile(@Param('id') userId: idDto): Promise<User> {
+    return await this.usersService.findOne(userId.id);
   }
   
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'updating user from body data' })
   @Put('update-one')
   // @ApiOperation({title: 'A private route for check the auth'})
-  async updateProfile(@Body() user: User): Promise<UpdateResult> {
+  async updateProfile(@Body() user: updateUserDto): Promise<UpdateProfileSerializer>  {
     return await this.usersService.updateOne(user);
   }
 
