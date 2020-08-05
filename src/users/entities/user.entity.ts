@@ -1,5 +1,7 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
+import { Book } from './book.entity';
+import { Address } from './address.entity';
 
 @Entity()
 export class User {
@@ -15,5 +17,12 @@ export class User {
 
   @Column({ default: true })
   isActive: string;
+
+
+  @OneToOne(type => Address, address => address.user)
+  address: Address;
+
+  @OneToMany(type => Book, book => book.user)
+  books: Book[];
 
 }

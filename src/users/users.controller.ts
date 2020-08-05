@@ -29,9 +29,17 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'finding user from url params' })
   @Post('find-one/:id')
-  async findOnemProfile(@Param('id') userId: idDto): Promise<User> {
+  async findOneProfileByParam(@Param('id') userId: idDto): Promise<User> {
     return await this.usersService.findOne(userId.id);
   }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ summary: 'finding books of an user by users ID' })
+  @Post('find-books-of-user/:id')
+  async findBooksOfUser(@Param('id') id: string): Promise<any> {
+    return await this.usersService.findBooksByUserId(id);
+  }
+
   
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: 'updating user from body data' })

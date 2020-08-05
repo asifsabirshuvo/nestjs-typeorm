@@ -6,7 +6,7 @@ export class UpdateProfileSerializer {
 
 	@Exclude()
     id: number;
-
+    
 	constructor(partial: Partial<UpdateProfileSerializer>) {
 		Object.assign(this, partial);
 	}

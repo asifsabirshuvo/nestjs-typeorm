@@ -5,13 +5,32 @@ import { User } from './entities/user.entity';
 import { createUserDto } from './dto/createUserDto';
 import { updateUserDto } from './dto/updateUserDto';
 import {UpdateProfileSerializer} from './serializer/updateProfileSerializer'
+import { Book } from './entities/book.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Book)
+    private bookRepository: Repository<Book>,
   ) {}
+
+  //--------FIND ALL BOOKS OF A USER BY USER ID ------------//
+ 
+  
+  async findBooksByUserId(idOfUser: string): Promise<any> {
+
+    const user = await this.usersRepository.find({
+      relations: ["books","address"],
+      where: { id: idOfUser }
+    });
+    console.log(user)
+    return user;
+
+  }
+
+
 
   async createOne(userdata: createUserDto): Promise<any> {
     if (!userdata.firstName) return 'firstname must be provided';
@@ -23,7 +42,9 @@ export class UsersService {
   }
 
   findAll(): Promise<User[]> {
+    
     return this.usersRepository.find();
+
   }
 
   async updateOne(user: updateUserDto): Promise<UpdateProfileSerializer> {
@@ -48,6 +69,10 @@ export class UsersService {
 
     return user;
   }
+
+
+
+  
 
   async remove(id: string): Promise<DeleteResult> {
     return await this.usersRepository.delete(id);
