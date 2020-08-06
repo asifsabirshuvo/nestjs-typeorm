@@ -1,7 +1,7 @@
-import { Get, Controller, Post, Body, Put, Param,ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
+import { Get, Controller, Post, Body, Put, Param,ClassSerializerInterceptor, UseInterceptors, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { UpdateResult, DeleteResult } from 'typeorm';
+import { DeleteResult } from 'typeorm';
 import { ApiOperation } from '@nestjs/swagger';
 import { createUserDto } from './dto/createUserDto';
 import { updateUserDto } from './dto/updateUserDto';
@@ -59,7 +59,20 @@ export class UsersController {
   @ApiOperation({ summary: 'getting all users' })
   @Get('all')
   // @ApiOperation({title: 'A private route for check the auth'})
-  async getProfile(): Promise<User[]> {
+  async getAll(): Promise<User[]> {
     return await this.usersService.findAll();
   }
+
+  //-----implementing pagination-----------//
+
+  @ApiOperation({ summary: 'getting paginated users' })
+  @Get('all-paginated')
+  // @ApiOperation({title: 'A private route for check the auth'})
+  async getPaginatedAll(@Query('page') page: number, @Query('qty') qty:number): Promise<any> {
+
+    return await this.usersService.paginatedFindAll(page,qty);
+ 
+  }
+
+
 }
