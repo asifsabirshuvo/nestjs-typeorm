@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult } from 'typeorm';
+import { Repository, DeleteResult, Connection } from 'typeorm';
 import { User } from './entities/user.entity';
 import { createUserDto } from './dto/createUserDto';
 import { updateUserDto } from './dto/updateUserDto';
@@ -14,7 +14,9 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @InjectRepository(Book)
     private bookRepository: Repository<Book>,
-  ) {}
+    private connection: Connection
+
+  ) { }
 
   //--------FIND ALL BOOKS OF A USER BY USER ID ------------//
 
@@ -31,12 +33,27 @@ export class UsersService {
     if (!userdata.firstName) return 'firstname must be provided';
     if (!userdata.lastName) return 'lastname must be provided';
 
-    await this.usersRepository.save(userdata);
+    // await this.usersRepository.save(userdata);
+    const masterQueryRunner = this.connection.createQueryRunner("master");
+    try {
+      await this.connection.query('insert into user (firstName,lastName) Values("mike","mark")', [], masterQueryRunner);
+    } finally {
+      return masterQueryRunner.release();
+    }
     return userdata;
   }
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(): Promise<User[]> {
+    // return this.usersRepository.find();
+    // await this.usersRepository.save(userdata);
+    const masterQueryRunner = this.connection.createQueryRunner("slave");
+    let data;
+    try {
+      data = await this.connection.query('select * from user', [], masterQueryRunner);
+    } finally {
+      masterQueryRunner.release();
+      return data;
+    }
   }
 
   async paginatedFindAll(page: number, qty: number): Promise<any> {

@@ -1,0 +1,28 @@
+{
+    "type": "mysql",
+    "logging": true,
+    "replication": {
+      "master": {
+        "host": "0.0.0.0",
+        "port": 3310,
+        "username": "root",
+        "password": "root",
+        "database": "typedb"
+      },
+      "database": [{
+        "host": "0.0.0.0",
+        "port": 3310,
+        "username": "root",
+        "password": "root",
+        "database": "typedb"
+      }],
+      "canRetry": true,
+      "removeNodeErrorCount": 5,
+      "restoreNodeTimeout": 0,
+      "selector": "RR"
+    },
+
+    "entities": ["*/**/*.entity{.ts,.js}"],
+    "synchronize": true,
+    "cache": true
+  }
