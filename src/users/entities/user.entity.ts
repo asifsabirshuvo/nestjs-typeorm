@@ -16,7 +16,7 @@ export class User {
   lastName: string;
 
   @Column({ default: true })
-  isActive: string;
+  balance: number;
 
 
   @OneToOne(type => Address, address => address.user)

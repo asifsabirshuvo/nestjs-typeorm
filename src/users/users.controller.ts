@@ -63,6 +63,14 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
+  @ApiOperation({ summary: 'lock and update' })
+  @Get('lock')
+  // @ApiOperation({title: 'A private route for check the auth'})
+  async lockan(@Query('amount')amount: string): Promise<any> {
+    return await this.usersService.lockAndUpdate(amount);
+  }
+
+  
   //-----implementing pagination-----------//
 
   @ApiOperation({ summary: 'getting paginated users' })
